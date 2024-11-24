@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// depois dar o migrate
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  Accept
+  Pending
+  Refused
+}
+
+enum NotificationType {
+  TASK_ASSIGNED      
+  TASK_COMPLETED    
+  PROJECT_CREATED  
+  PROJECT_UPDATED   
+  USER_INVITED       
+  COMMENT_ADDED     
+  DEADLINE_APPROACH  
+  STATUS_CHANGED  
+  GENERAL          
+}
+
+model UserMain {
+  uuid        String    @id @default(uuid()) 
+  auth_id     String    @db.VarChar(255) @unique
+  email       String
+  password    String   @db.VarChar(255)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime? 
+  role        Role
+  projects    Project[] 
+  tasks       Tasks[]
+  notifications Notification[]
+}
+
+model Project {
+  uuid         String    @id @default(uuid()) 
+  title        String    @db.VarChar(50) @unique
+  type_project String    @db.VarChar(255)
+  description  String    @db.Text
+  start_date   DateTime
+  end_date     DateTime
+  creator_id   String    
+  created_at   DateTime
+  updated_at   DateTime
+  creator      UserMain  @relation(fields: [creator_id], references: [uuid]) 
+  tasks        Tasks[]
+  notifications Notification[]
+}
+
+model Tasks {
+  uuid         String    @id @default(uuid()) 
+  project_id   String   
+  title        String    @db.VarChar(255)
+  description  String    @db.Text
+  assigned_to  String?   
+  assignee     UserMain? @relation(fields: [assigned_to], references: [uuid])
+  status       Status
+  start_date   DateTime
+  due_date     DateTime?
+  created_at   DateTime  @default(now())  @db.Timestamp()  
+  updated_at   DateTime  @updatedAt       @db.Timestamp()    
+  completed_at DateTime? @db.Timestamp()         
+  project      Project   @relation(fields: [project_id], references: [uuid])
+  notifications Notification[]
+}
+
+model Notification {
+  uuid          String          @id @default(uuid()) 
+  type          NotificationType 
+  email         String          @db.VarChar(255)              
+  message       String                             
+  user_id       String?                   
+  user          UserMain?       @relation(fields: [user_id], references: [uuid])
+  project_id    String?                  
+  project       Project?        @relation(fields: [project_id], references: [uuid]) 
+  task_id       String?                 
+  task          Tasks?          @relation(fields: [task_id], references: [uuid])
+  read_at       DateTime?                          
+  created_at    DateTime        @default(now())    
+}
