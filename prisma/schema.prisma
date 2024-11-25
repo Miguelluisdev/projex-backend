@@ -39,10 +39,10 @@ enum NotificationType {
 model UserMain {
   uuid        String    @id @default(uuid()) 
   auth_id     String    @db.VarChar(255) @unique
-  email       String
-  password    String   @db.VarChar(255)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  email       String    @unique
+  password    String    @db.VarChar(255)
+  created_at  DateTime  @default(now()) @db.Timestamp
+  updated_at  DateTime  @updatedAt  @db.Timestamp
   deleted_at  DateTime? 
   role        Role
   projects    Project[] 
@@ -58,8 +58,8 @@ model Project {
   start_date   DateTime
   end_date     DateTime
   creator_id   String    
-  created_at   DateTime
-  updated_at   DateTime
+  created_at   DateTime   @default(now()) @db.Timestamp
+  updated_at   DateTime   @default(now()) @db.Timestamp
   creator      UserMain  @relation(fields: [creator_id], references: [uuid]) 
   tasks        Tasks[]
   notifications Notification[]
@@ -73,8 +73,8 @@ model Tasks {
   assigned_to  String?   
   assignee     UserMain? @relation(fields: [assigned_to], references: [uuid])
   status       Status
-  start_date   DateTime
-  due_date     DateTime?
+  start_date   DateTime     @db.Timestamp
+  due_date     DateTime?     @db.Timestamp
   created_at   DateTime  @default(now())  @db.Timestamp()  
   updated_at   DateTime  @updatedAt       @db.Timestamp()    
   completed_at DateTime? @db.Timestamp()         
@@ -93,6 +93,6 @@ model Notification {
   project       Project?        @relation(fields: [project_id], references: [uuid]) 
   task_id       String?                 
   task          Tasks?          @relation(fields: [task_id], references: [uuid])
-  read_at       DateTime?                          
-  created_at    DateTime        @default(now())    
+  read_at       DateTime?           @default(now()) @db.Timestamp                 
+  created_at    DateTime         @default(now()) @db.Timestamp  
 }
