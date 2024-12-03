@@ -13,15 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 // depois dar o migrate
-enum Role {
-  USER
-  ADMIN
-}
 
 enum Status {
   Accept
   Pending
   Refused
+}
+
+enum PermissionType {
+   READ
+   WRITE
+   ADMIN
+   OWNER
 }
 
 enum NotificationType {
@@ -44,10 +47,11 @@ model UserMain {
   created_at  DateTime  @default(now()) @db.Timestamp
   updated_at  DateTime  @updatedAt  @db.Timestamp
   deleted_at  DateTime? 
-  role        Role
   projects    Project[] 
   tasks       Tasks[]
   notifications Notification[]
+  user_type     UserType[] 
+  permission Permission[] 
 }
 
 model Project {
@@ -63,6 +67,7 @@ model Project {
   creator      UserMain  @relation(fields: [creator_id], references: [uuid]) 
   tasks        Tasks[]
   notifications Notification[]
+  permission Permission[] 
 }
 
 model Tasks {
@@ -95,4 +100,25 @@ model Notification {
   task          Tasks?          @relation(fields: [task_id], references: [uuid])
   read_at       DateTime?           @default(now()) @db.Timestamp                 
   created_at    DateTime         @default(now()) @db.Timestamp  
+}
+
+model UserType {
+  uuid          String          @id @default(uuid())
+  user_id       String 
+  user          UserMain    @relation(fields: [user_id], references: [uuid])
+  email         String          @db.VarChar(255)   
+  position      String @db.VarChar(255)    
+  created_at    DateTime    @default(now()) @db.Timestamp
+  updated_at    DateTime    @updatedAt @db.Timestamp 
+}
+
+model Permission {
+  uuid  String @id @default(uuid())
+  user_id String
+  project_id String
+  user          UserMain        @relation(fields: [user_id], references: [uuid]) 
+  project       Project?        @relation(fields: [project_id], references: [uuid])
+  permission_type PermissionType 
+  granted_by    String         
+  grantedAt     DateTime        @default(now()) @db.Timestamp
 }
