@@ -1,8 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { UserType } from '@prisma/client';
 import { UserEntity } from 'src/domain/entities/user/user.entity';
 
 @ObjectType()
-export class UserTypeEntity {
+export class UserTypeEntity implements UserType {
   @Field(() => ID, { description: 'ID único do tipo de usuário' })
   uuid: string;
 

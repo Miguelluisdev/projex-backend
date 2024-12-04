@@ -1,11 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Tasks } from '@prisma/client';
 import { NotificationEntity } from 'src/domain/entities/notification/notification.entity';
 import { ProjectEntity } from 'src/domain/entities/project/project.entity';
 import { UserEntity } from 'src/domain/entities/user/user.entity';
 import { Status } from 'src/domain/enums/status.enum';
 
 @ObjectType()
-export class TaskEntity {
+export class TaskEntity implements Tasks {
   @Field(() => ID, { description: 'ID único da tarefa' })
   uuid: string;
 

@@ -1,11 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Project } from '@prisma/client';
 import { NotificationEntity } from '../notification/notification.entity';
 import { PermissionEntity } from '../permission/permission.enitty';
 import { TaskEntity } from '../tasks/task.entity';
 import { UserEntity } from '../user/user.entity';
 
 @ObjectType()
-export class ProjectEntity {
+export class ProjectEntity implements Project {
   @Field(() => ID, { description: 'ID único do projeto' })
   uuid: string;
 
