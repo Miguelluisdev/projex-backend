@@ -6,7 +6,7 @@ import { TaskEntity } from '../tasks/task.entity';
 
 @ObjectType()
 export class UserEntity implements UserMain {
-  @Field(() => ID, { description: 'uuid unico', nullable: true })
+  @Field(() => ID, { description: 'uuid unico' })
   uuid: string;
 
   @Field(() => String, {
@@ -15,9 +15,10 @@ export class UserEntity implements UserMain {
   })
   auth_id: string;
 
-  @Field(() => String, { description: 'Email of the user', nullable: true })
+  @Field(() => String, { description: 'Email of the user' })
   email: string;
 
+  @Field(() => String, { description: 'Password user' })
   password: string;
 
   @Field(() => Date, {
