@@ -15,6 +15,9 @@ export class UserEntity implements UserMain {
   })
   auth_id: string;
 
+  @Field(() => String, { description: 'Name of the user' })
+  username: string;
+
   @Field(() => String, { description: 'Email of the user' })
   email: string;
 
