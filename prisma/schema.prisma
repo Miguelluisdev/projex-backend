@@ -41,6 +41,7 @@ enum NotificationType {
 
 model UserMain {
   uuid        String    @id @default(uuid()) 
+  username    String    @db.VarChar(255)
   auth_id     String    @db.VarChar(255) @unique
   email       String    @unique
   password    String    @db.VarChar(255)
