@@ -1,5 +1,7 @@
 import { CreateUserInput, UpdateUserInput } from '@dtos';
 import { Injectable } from '@nestjs/common';
+import { ServiceBase } from 'src/aplication/bases/services/service.base';
+import { UserEntity } from 'src/domain/entities/user/user.entity';
 
 @Injectable()
 export class UserService {
@@ -11,15 +13,15 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(uuid: string) {
+    return `This action returns a #${uuid} user`;
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  update(uuid: string, updateUserInput: UpdateUserInput) {
+    return `This action updates a #${uuid} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(uuid: string) {
+    return `This action removes a #${uuid} user`;
   }
 }
