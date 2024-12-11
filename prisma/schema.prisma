@@ -39,6 +39,16 @@ enum NotificationType {
   GENERAL          
 }
 
+
+model Auth {
+  id String @id @default(uuid())
+  user_id String
+  created_at  DateTime  @default(now()) @db.Timestamp
+  updated_at  DateTime  @updatedAt  @db.Timestamp
+  deleted_at  DateTime? @db.Timestamp()
+  user UserMain @relation(fields: [user_id] , references: [uuid])
+}
+
 model UserMain {
   uuid        String    @id @default(uuid()) 
   username    String    @db.VarChar(255)
@@ -48,6 +58,7 @@ model UserMain {
   created_at  DateTime  @default(now()) @db.Timestamp
   updated_at  DateTime  @updatedAt  @db.Timestamp
   deleted_at  DateTime? 
+  auth Auth[]
   projects    Project[] 
   tasks       Tasks[]
   notifications Notification[]
