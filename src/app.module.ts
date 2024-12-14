@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphqlModule } from './graphql/graphql.module';
@@ -23,6 +24,9 @@ import { UserModule } from './modules/user/user.module';
     UserTypeModule,
     PermissionModule,
     AuthModule,
+    EventEmitterModule.forRoot({
+      global: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
