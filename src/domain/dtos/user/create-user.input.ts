@@ -11,7 +11,7 @@ export class CreateUserInput {
   @IsNotEmpty()
   @IsString()
   @Field(() => String)
-  name: string;
+  username: string;
 
   @IsNotEmpty()
   @IsEmail()

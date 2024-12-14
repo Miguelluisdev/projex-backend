@@ -1,19 +1,14 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { UserMain } from '@prisma/client';
+import { AuthEntity } from '../auth/auth.entity';
 import { NotificationEntity } from '../notification/notification.entity';
 import { ProjectEntity } from '../project/project.entity';
 import { TaskEntity } from '../tasks/task.entity';
 
 @ObjectType()
 export class UserEntity implements UserMain {
-  @Field(() => ID, { description: 'uuid unico' })
+  @Field(() => ID, { description: 'uuid unico', nullable: true })
   uuid: string;
-
-  @Field(() => String, {
-    description: 'Authentication ID of the user',
-    nullable: true,
-  })
-  auth_id: string;
 
   @Field(() => String, { description: 'Name of the user' })
   username: string;
@@ -46,17 +41,22 @@ export class UserEntity implements UserMain {
     description: 'Projects associated with the user',
     nullable: true,
   })
-  projects: ProjectEntity[];
+  projects?: ProjectEntity[];
 
   @Field(() => [TaskEntity], {
     description: 'Tasks associated with the user',
     nullable: true,
   })
-  tasks: TaskEntity[];
+  tasks?: TaskEntity[];
 
   @Field(() => [NotificationEntity], {
     description: 'Notifications associated with the user',
     nullable: true,
   })
-  notifications: NotificationEntity[];
+  notifications?: AuthEntity[];
+  @Field(() => [AuthEntity], {
+    description: 'Notifications associated with the user',
+    nullable: true,
+  })
+  Auth?: AuthEntity[];
 }

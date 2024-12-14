@@ -1,7 +1,8 @@
-import { Field, InputType, Int, PartialType } from '@nestjs/graphql';
+import { Field, InputType, Int, OmitType, PartialType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsStrongPassword,
   IsUUID,
@@ -9,24 +10,26 @@ import {
 import { CreateUserInput } from './create-user.input';
 
 @InputType()
-export class UpdateUserInput extends PartialType(CreateUserInput) {
+export class UpdateUserInput extends PartialType(
+  OmitType(CreateUserInput, ['password', 'email', 'username']),
+) {
+  @Field(() => String, { nullable: true }) 
   @IsNotEmpty()
   @IsUUID()
-  @Field(() => String)
-  id: string;
+  uuid: string;
 
-  @IsNotEmpty()
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
-  @Field(() => String)
-  name: string;
+  username: string;
 
-  @IsNotEmpty()
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsEmail()
-  @Field(() => String)
   email: string;
 
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsStrongPassword()
-  @IsNotEmpty()
-  @Field(() => String)
   password: string;
 }
