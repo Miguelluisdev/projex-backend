@@ -4,6 +4,7 @@ import { enviroment } from 'src/aplication/config/enviroment';
 import { UserModule } from '../user/user.module';
 import { AuthResolver } from './resolvers/auth.resolver';
 import { AuthService } from './services/auth.service';
+import { AuthRepository } from './repository/auth.repository';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { AuthService } from './services/auth.service';
     }),
     forwardRef(() => UserModule),
   ],
-  providers: [AuthResolver, AuthService],
+  providers: [AuthResolver, AuthService , AuthRepository],
   exports: [AuthService],
 })
 export class AuthModule {}
