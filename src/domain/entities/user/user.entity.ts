@@ -59,4 +59,7 @@ export class UserEntity implements UserMain {
     nullable: true,
   })
   Auth?: AuthEntity[];
+
+  @Field({ nullable: true })
+  token?: string | null;
 }
