@@ -1,5 +1,11 @@
 import { CreateUserInput, UpdateUserInput } from '@dtos';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ServiceBase } from 'src/aplication/bases/services/service.base';
 import { ENUM_EVENTS } from 'src/aplication/events/events.enum';
@@ -16,6 +22,7 @@ export class UserService
 {
   constructor(
     private readonly userRepository: UserRepository,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -38,10 +45,11 @@ export class UserService
       userId: user.uuid,
     });
 
-    //  adicionar o token depois
+    const auth = await this.authService.justCreated(user.uuid);
 
     return {
       ...user,
+      token: auth.token,
     };
   }
   async findAll(queryParams: QueryParamsInput): Promise<UserEntity[]> {
