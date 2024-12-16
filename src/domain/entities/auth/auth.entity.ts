@@ -4,7 +4,7 @@ import { Auth } from '@prisma/client';
 @ObjectType()
 export class AuthEntity implements Auth {
   @Field()
-  id: string;
+  uuid: string;
 
   @Field()
   user_id: string;
