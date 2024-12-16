@@ -13,6 +13,7 @@ import { AuthEntity } from 'src/domain/entities/auth/auth.entity';
 import { UserEntity } from 'src/domain/entities/user/user.entity';
 import { UserService } from 'src/modules/user/services/user.service';
 import { AuthService } from '../services/auth.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Resolver(() => AuthEntity)
 export class AuthResolver {
@@ -29,13 +30,15 @@ export class AuthResolver {
 
   @Query(() => AuthEntity)
   whoAmI(@CurrentAccess() auth: AuthEntity) {
+    if (!auth) {
+      throw new HttpException('User not authenticated', HttpStatus.UNAUTHORIZED);
+    }
     return auth;
   }
-
+  
   @ResolveField(() => UserEntity, { nullable: true })
   @IsPublic()
   async user(@Parent() auth: AuthEntity) {
-    // fazer o findById do usuario para jogar aqui
-    // return this.userService.findById(auth.user_id);
+    return this.userService.findById(auth.uuid);
   }
 }
