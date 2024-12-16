@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { GraphqlModule } from './graphql/graphql.module';
 import { PrismaModule } from './infra/database/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AuthGuard } from './modules/auth/guard/auth.guard';
 import { NotificationModule } from './modules/notification/notification.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { ProjectModule } from './modules/project/project.module';
@@ -29,6 +30,12 @@ import { UserModule } from './modules/user/user.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
