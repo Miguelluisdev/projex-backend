@@ -1,4 +1,4 @@
 export class CreateAuthInput {
-  expiresAt: Date;
-  userId: string;
+  expires_at: Date;
+  user_id: string;
 }
