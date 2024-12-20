@@ -7,7 +7,7 @@ export class QueryBuilder {
   constructor() {
     this.query = {
       where: {
-        deletedAt: null,
+        deleted_at: null,
       },
     };
   }
