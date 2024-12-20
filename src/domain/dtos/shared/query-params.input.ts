@@ -6,7 +6,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-// import { IsSort } from 'src/common/validators';
+import { IsSort } from 'src/aplication/validators/sort';
+
 
 @InputType()
 export class QueryParamsInput {
@@ -22,7 +23,7 @@ export class QueryParamsInput {
 
   @IsString()
   @IsOptional()
-//   @IsSort()
+  @IsSort()
   @Field({ nullable: true })
   orderBy?: string;
 
