@@ -13,6 +13,7 @@ import { ProjectModule } from './modules/project/project.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { UserTypeModule } from './modules/user-type/user-type.module';
 import { UserModule } from './modules/user/user.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './modules/user/user.module';
     UserTypeModule,
     PermissionModule,
     AuthModule,
+    MailModule,
     EventEmitterModule.forRoot({
       global: true,
     }),
