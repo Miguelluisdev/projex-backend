@@ -7,9 +7,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { addDays } from 'date-fns';
+import { addDays, addMinutes } from 'date-fns';
 import { ServiceBase } from 'src/aplication/bases/services/service.base';
 import { AuthInput } from 'src/domain/dtos/auth/auth.dto';
+import { ForgotPasswordInput } from 'src/domain/dtos/auth/forgot-password.input';
+import { ResetPasswordInput } from 'src/domain/dtos/auth/reset-password.input';
 import { UpdateAuthInput } from 'src/domain/dtos/auth/update-auth.input';
 import { AuthEntity } from 'src/domain/entities/auth/auth.entity';
 import { UserService } from 'src/modules/user/services/user.service';
@@ -53,6 +55,48 @@ export class AuthService
       ...auth,
       token,
     };
+  }
+
+  async forgotPassword(input: ForgotPasswordInput): Promise<boolean> {
+    const user = await this.userService.findByEmail(input.email);
+
+    if (!user) {
+      throw new HttpException('Usuario não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    const token = this.jwtService.sign(
+      { sub: user.uuid },
+      { expiresIn: '15m' },
+    );
+
+    // adicionar o envio de email com este link
+    const link = `http://localhost:3000/reset-password?token=${token}`;
+    console.log(link);
+    return true;
+  }
+
+  async resetPassword(input: ResetPasswordInput): Promise<string> {
+    let payload;
+
+    try {
+      payload = this.jwtService.verify(input.token);
+    } catch (error) {
+      throw new HttpException('Token invalido', HttpStatus.UNAUTHORIZED);
+    }
+
+    const user = await this.userService.findById(payload.sub);
+    if (!user) {
+      throw new HttpException('Usuario não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    await this.userService.updatePassword(user.uuid, input.password);
+    console.log('password reseted');
+
+    // adicionar envio de email confirmando a mudança eo link do site
+
+    const newToken = this.jwtService.sign({ sub: user.uuid  } , { expiresIn: '15d' });
+
+    return newToken;
   }
 
   async findById(uuid: string): Promise<AuthEntity> {
