@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { AuthResolver } from './resolvers/auth.resolver';
 import { AuthService } from './services/auth.service';
 import { AuthRepository } from './repository/auth.repository';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthRepository } from './repository/auth.repository';
       },
     }),
     forwardRef(() => UserModule),
+    MailModule,
   ],
   providers: [AuthResolver, AuthService , AuthRepository],
   exports: [AuthService],
