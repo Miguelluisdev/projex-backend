@@ -105,6 +105,35 @@ export class UserService
     return update;
   }
 
+  async updatePassword(uuid: string, password: string): Promise<UserEntity> {
+    const user = await this.findById(uuid);
+
+    if (!user) {
+      throw new HttpException('Usuario não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    const hashedPassword = await hash(password);
+    const update = await this.userRepository.update({
+      uuid: user.uuid,
+      password: hashedPassword,
+      username: user.username,
+      email: user.email,
+    });
+
+    if (!update) {
+      throw new HttpException(
+        'Falha ao atualizar a senha do usuario',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+
+    this.eventEmitter.emit(ENUM_EVENTS.user.updated, {
+      userId: update.uuid,
+    });
+
+    return update;
+  }
+
   async remove?(uuid: string): Promise<boolean> {
     const user = await this.findById(uuid);
 
