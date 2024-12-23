@@ -14,6 +14,7 @@ import { ForgotPasswordInput } from 'src/domain/dtos/auth/forgot-password.input'
 import { ResetPasswordInput } from 'src/domain/dtos/auth/reset-password.input';
 import { UpdateAuthInput } from 'src/domain/dtos/auth/update-auth.input';
 import { AuthEntity } from 'src/domain/entities/auth/auth.entity';
+import { MailerService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/services/user.service';
 import { AuthRepository } from '../repository/auth.repository';
 
@@ -26,6 +27,7 @@ export class AuthService
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly authRepository: AuthRepository,
+    private readonly mailerService: MailerService,
   ) {}
 
   async create(authInput: AuthInput): Promise<AuthEntity> {
@@ -71,7 +73,18 @@ export class AuthService
 
     // adicionar o envio de email com este link
     const link = `http://localhost:3000/reset-password?token=${token}`;
-    console.log(link);
+
+    await this.mailerService.sendMail(
+      user.email,
+      'Redefinição de Senha',
+      `Acesse o link para redefinir sua senha: ${link}`,
+      `<p>Olá,</p>
+       <p>Para redefinir sua senha, clique no link abaixo:</p>
+       <a href="${link}">Redefinir Senha</a>
+       <p>Este link é válido por 15 minutos.</p>`,
+    );
+
+    console.log('Email de redefinição enviado:', link);
     return true;
   }
 
@@ -92,9 +105,19 @@ export class AuthService
     await this.userService.updatePassword(user.uuid, input.password);
     console.log('password reseted');
 
-    // adicionar envio de email confirmando a mudança eo link do site
+    await this.mailerService.sendMail(
+      user.email,
+      'Senha Alterada com Sucesso',
+      `Sua senha foi alterada com sucesso.`,
+      `<p>Olá,</p>
+       <p>Sua senha foi alterada com sucesso. Caso não tenha sido você, entre em contato com o suporte imediatamente.</p>
+       <p><a href="http://localhost:3000">Acessar Sistema</a></p>`,
+    );
 
-    const newToken = this.jwtService.sign({ sub: user.uuid  } , { expiresIn: '15d' });
+    const newToken = this.jwtService.sign(
+      { sub: user.uuid },
+      { expiresIn: '15d' },
+    );
 
     return newToken;
   }
