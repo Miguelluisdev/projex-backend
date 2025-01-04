@@ -30,10 +30,11 @@ export class AuthResolver {
     return this.authService.create(AuthInput);
   }
 
-  @Mutation(() => Boolean)
-  async forgotPasswordd(@Args('input') input: ForgotPasswordInput) {
-    return this.authService.forgotPassword(input);
+  @Mutation(() => String) 
+  async forgotPassword(@Args('input') input: ForgotPasswordInput) {
+    return this.authService.forgotPassword(input); 
   }
+  
 
   @Mutation(() => String)
   async resetPassword(@Args('input') input: ResetPasswordInput) {

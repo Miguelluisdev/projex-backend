@@ -59,21 +59,20 @@ export class AuthService
     };
   }
 
-  async forgotPassword(input: ForgotPasswordInput): Promise<boolean> {
+  async forgotPassword(input: ForgotPasswordInput): Promise<string> {
     const user = await this.userService.findByEmail(input.email);
-
+  
     if (!user) {
-      throw new HttpException('Usuario não encontrado', HttpStatus.NOT_FOUND);
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
     }
-
+  
     const token = this.jwtService.sign(
       { sub: user.uuid },
       { expiresIn: '15m' },
     );
-
-    // adicionar o envio de email com este link
+  
     const link = `http://localhost:3000/reset-password?token=${token}`;
-
+  
     await this.mailerService.sendMail(
       user.email,
       'Redefinição de Senha',
@@ -83,9 +82,9 @@ export class AuthService
        <a href="${link}">Redefinir Senha</a>
        <p>Este link é válido por 15 minutos.</p>`,
     );
-
+  
     console.log('Email de redefinição enviado:', link);
-    return true;
+    return user.email; 
   }
 
   async resetPassword(input: ResetPasswordInput): Promise<string> {
