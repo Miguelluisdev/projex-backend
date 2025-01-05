@@ -30,7 +30,7 @@
 
 ## 🚀 <a name="introducao">Introdução</a>
 
-O backend do **Projex** é responsável por gerenciar toda a lógica de negócios, manipulação de dados e segurança da aplicação. Usando **NestJS** e **GraphQL**, garantimos uma API eficiente, flexível e escalável.
+O backend do **Projex** é responsável por gerenciar toda a lógica de negócios, manipulação de dados e segurança da aplicação. Usando **NestJS** e **GraphQL**.
 
 ## ⚙️ <a name="tecnologias">Tecnologias Utilizadas</a>
 
@@ -74,7 +74,7 @@ O backend do **Projex** é responsável por gerenciar toda a lógica de negócio
 
 1. Clone o repositório:
 ```bash
-  git clone https://github.com/seu-usuario/projex-backend.git
+  git clone https://github.com/Miguelluisdev/projex-backend.git
   cd projex-backend
 ```
 
