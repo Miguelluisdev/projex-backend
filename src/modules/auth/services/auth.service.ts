@@ -71,7 +71,7 @@ export class AuthService
       { expiresIn: '15m' },
     );
   
-    const link = `http://localhost:3000/reset-password?token=${token}`;
+    const link = `http://localhost:3000/reset-password/${token}`;
   
     await this.mailerService.sendMail(
       user.email,
