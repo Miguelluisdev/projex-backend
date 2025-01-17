@@ -15,28 +15,25 @@ export class ProjectResolver {
     return this.projectService.create(createProjectInput);
   }
 
-  @Query(() => [ProjectEntity], { name: 'project' })
+  @Query(() => [ProjectEntity], { name: 'findAllProject' })
   findAll() {
     return this.projectService.findAll();
   }
 
-  @Query(() => ProjectEntity, { name: 'project' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.projectService.findOne(id);
+  @Query(() => ProjectEntity, { name: 'findProjectById' })
+  findById(@Args('id', { type: () => Int }) uuid: string) {
+    return this.projectService.findOne(uuid);
   }
 
   @Mutation(() => ProjectEntity)
   updateProject(
     @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
   ) {
-    return this.projectService.update(
-      updateProjectInput.id,
-      updateProjectInput,
-    );
+    return this.projectService.update(updateProjectInput);
   }
 
   @Mutation(() => ProjectEntity)
-  removeProject(@Args('id', { type: () => Int }) id: number) {
-    return this.projectService.remove(id);
+  removeProject(@Args('uuid', { type: () => String }) uuid: string) {
+    return this.projectService.remove(uuid);
   }
 }

@@ -12,15 +12,15 @@ export class ProjectService {
     return `This action returns all project`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  findOne(uuid: string) {
+    return `This action returns a  project`;
   }
 
-  update(id: number, updateProjectInput: UpdateProjectInput) {
-    return `This action updates a #${id} project`;
+  update(updateProjectInput: UpdateProjectInput) {
+    return `This action updates a # project`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  remove(uuid: string) {
+    return `This action removes a  project`;
   }
 }
