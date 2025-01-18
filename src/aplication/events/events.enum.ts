@@ -5,3 +5,11 @@ export const ENUM_EVENTS = {
     deleted: 'user.deleted',
   },
 };
+
+export const ENUM_PROJECTA = {
+  project: {
+    created: 'project.created',
+    updated: 'project.updated',
+    deleted: 'project.deleted',
+  },
+};
