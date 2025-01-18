@@ -1,10 +1,18 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql';
 import { IsDate, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 import { StatusProject } from 'src/domain/enums/status.project.enum';
 import { CreateProjectInput } from './create-project.input';
 
 @InputType()
-export class UpdateProjectInput extends PartialType(CreateProjectInput) {
+export class UpdateProjectInput extends OmitType(CreateProjectInput, [
+  'title',
+  'category',
+  'description',
+  'end_date',
+  'start_date',
+  'goal',
+  'type_project',
+]) {
   @IsUUID()
   @IsString()
   @Field(() => String, { description: 'ID único do projeto' })
